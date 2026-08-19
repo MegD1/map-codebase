@@ -1,0 +1,41 @@
+{
+  "meta": {
+    "product": "RepoScope",
+    "hostLabel": "Application",
+    "title": "Example System Atlas",
+    "repository": "example-repository",
+    "description": "Replace this with one concrete sentence about the repository.",
+    "version": "0.1.0"
+  },
+  "sources": ["src/**/*.{js,ts,jsx,tsx}", "tests/**/*.{js,ts}"],
+  "ignore": ["dist/**", "coverage/**", "**/*.generated.*"],
+  "groups": [
+    { "id": "experience", "label": "01 / EXPERIENCE", "name": "Interface", "x": 40, "y": 60, "width": 520, "height": 640, "tone": "cyan" },
+    { "id": "system", "label": "02 / SYSTEM", "name": "Runtime", "x": 600, "y": 60, "width": 670, "height": 640, "tone": "violet" }
+  ],
+  "nodes": [
+    {
+      "id": "client", "group": "experience", "label": "Client", "role": "user interface", "kind": "interface", "x": 90, "y": 150,
+      "patterns": ["src/client/**/*.{js,ts,jsx,tsx}"],
+      "whatItDoes": "Replace with the client outcome.",
+      "howItsBuilt": "Replace with the relevant implementation decision."
+    },
+    {
+      "id": "service", "group": "system", "label": "Service", "role": "request handler", "kind": "gateway", "x": 660, "y": 150,
+      "patterns": ["src/server/**/*.{js,ts}"],
+      "whatItDoes": "Replace with the service outcome.",
+      "howItsBuilt": "Replace with the relevant implementation decision."
+    }
+  ],
+  "edges": [
+    { "id": "client-to-service", "from": "client", "to": "service", "label": "request", "kind": "request", "evidence": ["src/client/api.ts", "src/server/index.ts"] }
+  ],
+  "flows": [
+    {
+      "id": "primary-request", "label": "Primary request", "short": "Client → service", "color": "cyan", "edges": ["client-to-service"],
+      "payloads": [
+        { "id": "request", "label": "Request", "type": "HTTP request", "preview": "POST /example", "body": "{\n  \"example\": true\n}", "source": "Client", "destination": "Service" }
+      ]
+    }
+  ]
+}

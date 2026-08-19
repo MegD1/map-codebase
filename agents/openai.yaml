@@ -1,0 +1,4 @@
+interface:
+  display_name: "Map Codebase"
+  short_description: "Build an interactive, inspectable repository atlas"
+  default_prompt: "Use $map-codebase to turn this repository into an interactive architecture atlas."

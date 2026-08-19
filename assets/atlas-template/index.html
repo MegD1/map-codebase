@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f5f5ef" />
+    <meta name="description" content="可交互代码库架构、真实数据流与可检查 payload" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>RepoScope · Repository System Atlas</title>
+    <link rel="icon" href="../icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./atlas.css?v=1" />
+  </head>
+  <body>
+    <a class="skip-link" href="#atlasMap">跳到代码星图</a>
+    <div class="atlas-app">
+      <header class="atlas-header">
+        <a class="atlas-brand" href="../" aria-label="返回工作台">
+          <span class="brand-sigil" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h5" /></svg>
+          </span>
+          <span><b>RepoScope</b><small>REPOSITORY / SYSTEM ATLAS</small></span>
+        </a>
+
+        <dl class="atlas-metrics" aria-label="仓库测量">
+          <div><dt>FILES</dt><dd id="metricFiles">—</dd></div>
+          <div><dt>LINES</dt><dd id="metricLines">—</dd></div>
+          <div><dt>MAPPED</dt><dd id="metricCoverage">—</dd></div>
+          <div><dt>MODEL</dt><dd id="metricFingerprint">—</dd></div>
+        </dl>
+
+        <div class="header-actions">
+          <button class="control-button primary" id="playButton" type="button" aria-pressed="true" aria-label="暂停数据流">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 7 8 5-8 5z" /></svg>
+            <span>暂停数据流</span>
+          </button>
+          <button class="control-button" id="stepButton" type="button" aria-label="单步追踪">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7v10l7-5zM16 7v10" /></svg>
+            <span>单步追踪</span>
+          </button>
+          <button class="icon-control" id="resetButton" type="button" aria-label="重置缩放与位置" title="重置视图">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.34-5.66L4 8.68M4 4v4.68h4.68" /></svg>
+          </button>
+        </div>
+      </header>
+
+      <aside class="flow-rail" aria-labelledby="flowHeading">
+        <div class="rail-heading">
+          <span>LIVE PATHS</span>
+          <h1 id="flowHeading">真实流程</h1>
+          <p>选择一条路径，移动光点会携带可检查的数据片段。</p>
+        </div>
+        <div class="flow-list" id="flowList"></div>
+        <div class="rail-legend" aria-label="图例">
+          <span><i class="legend-pulse"></i>可检查 payload</span>
+          <span><i class="legend-line"></i>当前调用路径</span>
+          <span><i class="legend-node"></i>代码子系统</span>
+        </div>
+      </aside>
+
+      <main class="map-panel" id="atlasMap" tabindex="-1">
+        <div class="map-toolbar">
+          <label class="module-search" for="moduleSearch">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6" /><path d="m16 16 4 4" /></svg>
+            <span class="sr-only">搜索模块或文件</span>
+            <input id="moduleSearch" type="search" placeholder="搜索模块或文件路径" autocomplete="off" />
+            <kbd>⌘ K</kbd>
+          </label>
+          <div class="map-status" aria-live="polite">
+            <i></i><span id="mapStatus">正在读取仓库模型</span>
+          </div>
+        </div>
+
+        <div class="stage-shell" id="stageShell">
+          <svg class="atlas-stage" id="atlasStage" viewBox="0 0 1320 760" role="img" aria-labelledby="stageTitle stageDescription">
+            <title id="stageTitle">代码库架构图</title>
+            <desc id="stageDescription">可缩放和拖拽的模块关系图。节点代表代码子系统，连线代表真实调用，移动光点代表流程中的数据片段。</desc>
+            <defs>
+              <pattern id="microGrid" width="48" height="24" patternUnits="userSpaceOnUse">
+                <path d="M0 12L24 0L48 12L24 24Z M0 12L24 24 M24 0L48 12" class="micro-grid-line" />
+              </pattern>
+              <filter id="nodeGlow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+              </filter>
+              <filter id="payloadGlow" x="-80%" y="-80%" width="260%" height="260%">
+                <feGaussianBlur stdDeviation="5" result="blur" />
+                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+              </filter>
+              <marker id="edgeArrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                <path d="M0 0 8 4 0 8Z" />
+              </marker>
+            </defs>
+            <g id="viewport">
+              <rect class="stage-grid" x="0" y="0" width="1320" height="760" fill="url(#microGrid)" />
+              <g id="groupLayer"></g>
+              <g id="edgeLayer"></g>
+              <g id="nodeLayer"></g>
+              <g id="particleLayer"></g>
+            </g>
+          </svg>
+          <div class="zoom-readout" id="zoomReadout">100%</div>
+          <p class="stage-hint">拖拽平移 · 滚轮缩放 · 点击节点或光点查看细节</p>
+        </div>
+      </main>
+
+      <aside class="inspector" id="inspector" aria-labelledby="inspectorTitle">
+        <div class="inspector-scanline" aria-hidden="true"></div>
+        <div class="inspector-head">
+          <div><span id="inspectorKind">FLOW / 01</span><h2 id="inspectorTitle">—</h2></div>
+          <button class="inspector-close" id="inspectorClose" type="button" aria-label="关闭详情面板">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17" /></svg>
+          </button>
+        </div>
+        <div class="inspector-body" id="inspectorBody"></div>
+        <div class="inspector-actions">
+          <button class="control-button primary full" id="copyContextButton" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="10" height="10" rx="1" /><path d="M15 8V5H5v10h3" /></svg>
+            <span>复制讨论上下文</span>
+          </button>
+          <a class="control-button full" href="../">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6-6 6 6 6M4 12h16" /></svg>
+            <span id="hostLinkLabel">返回工作台</span>
+          </a>
+        </div>
+      </aside>
+
+      <footer class="atlas-footer">
+        <span><i></i> GEOMETRY: MEASURED</span>
+        <span id="generatedAt">GENERATED —</span>
+        <span>NO SECRETS OR RUNTIME DATA SCANNED</span>
+      </footer>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./data.generated.js"></script>
+    <script src="./atlas.js"></script>
+  </body>
+</html>

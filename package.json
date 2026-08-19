@@ -1,0 +1,14 @@
+{
+  "name": "map-codebase-skill",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Codex Skill for building measured, interactive repository architecture atlases.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MegD1/map-codebase.git"
+  },
+  "scripts": {
+    "check": "node scripts/validate-package.mjs && node --check assets/atlas-template/atlas.js && node --check scripts/sync-atlas.mjs"
+  }
+}
