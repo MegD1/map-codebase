@@ -4,6 +4,7 @@ import { constants } from "node:fs";
 const requiredFiles = [
   "SKILL.md",
   "README.md",
+  "README.en.md",
   "agents/openai.yaml",
   "assets/atlas.config.example.json",
   "assets/preview.jpg",

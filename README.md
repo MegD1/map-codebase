@@ -1,5 +1,7 @@
 # map-codebase
 
+[简体中文](./README.md) | [English](./README.en.md)
+
 `map-codebase` 是一个用于生成交互式代码库架构地图的 Codex Skill。
 
 它会读取真实源码，将代码子系统转换为可缩放、可拖拽、可检查的等距数字建筑，并把有源码证据的调用关系绘制为地面线路。沿线路移动的光点代表真实的数据片段，可以暂停、单步追踪并查看其内容。
@@ -57,12 +59,16 @@ ASCII 点、`0`、`1`、`+` 和 `:` 只作为代码块表面的确定性纹理�
 
 ```text
 map-codebase/
+├── .github/
+│   └── workflows/check.yml
 ├── SKILL.md
 ├── README.md
+├── README.en.md
 ├── agents/
 │   └── openai.yaml
 ├── assets/
 │   ├── atlas.config.example.json
+│   ├── preview.jpg
 │   └── atlas-template/
 │       ├── index.html
 │       ├── atlas.css
@@ -71,7 +77,8 @@ map-codebase/
 │   ├── authoring.md
 │   └── schema.md
 └── scripts/
-    └── sync-atlas.mjs
+    ├── sync-atlas.mjs
+    └── validate-package.mjs
 ```
 
 ## 安装
